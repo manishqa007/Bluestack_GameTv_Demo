@@ -1,5 +1,7 @@
 package Demo.automation;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -20,8 +22,8 @@ public class BlueStack {
 	int statusCode;
 	
 	@Test
-	public void launchUrl() {
-		System.setProperty("webdriver.chrome.driver","Driver/chromedriver.exe");
+	public void launch_Url() {
+		System.setProperty("webdriver.chrome.driver","Resources/Driver/chromedriver.exe");
 		if(driver==null)
 			driver = new ChromeDriver();
 		driver.get("https://www.game.tv/");
@@ -29,10 +31,11 @@ public class BlueStack {
 		System.out.println("Launched url");
 	}
 
-	@Test(dependsOnMethods = "launchUrl")
-	public void fetchTounramentData() throws InterruptedException {
+	@Test(dependsOnMethods = "launch_Url")
+	public void fetch_tounrament_data() throws InterruptedException, IOException {
 		int gameCount = driver.findElements(By.xpath("//li[@class='games-item']")).size();
 		String addedWeeklyTextXpath = "//p[text()='More Added Weekly']";
+		boolean title = true;
 		
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -72,6 +75,17 @@ public class BlueStack {
 			
 			System.out.println(i+"  " + gameName +"  "+pageUrl+ "  "+statusCode+"  " + tournamentCount);
 			driver.navigate().back();
+			
+			
+			try (FileWriter file = new FileWriter("Resources\\TestData\\demoResult.txt", true)) {
+				if (title) {
+					file.write("#" + "\t\t\t" + "Game name" + "\t\t\t\t\t\t\t\t" + "Page URL" + "\t\t\t\t\t\t\t\t"+ "Page Status" + "\t\t\t" + "Tournament count" + "\n");
+					title = false;
+				}
+				file.write(i + "  " + gameName + "  " + pageUrl + "  " + statusCode + "  " + tournamentCount + "\n");
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 	

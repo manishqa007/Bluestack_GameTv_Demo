@@ -5,9 +5,9 @@
     <classes>
       <class name="Demo.automation.BlueStack">
         <methods>
-          <include name="fetchTounramentData"/>
+          <include name="launch_Url"/>
+          <include name="fetch_tounrament_data"/>
           <include name="stop_test_session"/>
-          <include name="launchUrl"/>
         </methods>
       </class> <!-- Demo.automation.BlueStack -->
     </classes>
